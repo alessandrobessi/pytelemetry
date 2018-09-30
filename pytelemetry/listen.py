@@ -1,10 +1,11 @@
-import time
 import logging
 import socket
 import netifaces as ni
 import pickle
+import datetime
 
-from f1_2018_struct import *
+from pytelemetry.f1_2018_struct import *
+from pytelemetry.helpers import get_lap_time
 
 logging.basicConfig(level=logging.INFO)
 
@@ -36,6 +37,13 @@ class Telemetry:
         self.ip = ni.ifaddresses('wlp58s0')[ni.AF_INET][0]['addr']
         self.socket.bind((self.ip, port))
         self.buffer_size = 1341
+
+        self.laps_dict = dict()
+        self.lap_count = 0
+        self.laps_dict[self.lap_count] = list()
+
+        self.now = datetime.datetime.now().strftime("%Y%m%d_%H%M")
+
 
     def listen(self):
         logging.info("{} is listening on port {} ... ".format(
@@ -70,29 +78,32 @@ class Telemetry:
             elif int(header.m_packetId) == 7:
                 packet = PacketCarStatusData.from_buffer_copy(data[0:1061])
 
+    def save_data(self):
+        file_path = '../sessions/session_{}.pickle'.format(self.now)
 
-if __name__ == '__main__':
-    telemetry = Telemetry()
-    laps_dict = dict()
-    lap_count = 0
-    laps_dict[lap_count] = list()
+        for packet_type, packet_data in self.listen():
+            if packet_type == 'lap_data' and packet_data[0] < 0.01:
+                if self.lap_count > 0:
+                    logging.info("Saving Lap {} data".format(self.lap_count))
+                    with open(file_path, 'wb') as f:
+                        pickle.dump(self.laps_dict, f, protocol=pickle.HIGHEST_PROTOCOL)
+                self.lap_count += 1
+                self.laps_dict[self.lap_count] = list()
 
-    for packet_type, packet_data in telemetry.listen():
-        if packet_type == 'lap_data' and packet_data[0] < 0.01:
-            if lap_count > 0:
-                logging.info("Saving Lap {} data".format(lap_count))
-                with open('session_{}.pickle'.format(int(time.time())), 'wb') as f:
-                    pickle.dump(laps_dict, f, protocol=pickle.HIGHEST_PROTOCOL)
-            lap_count += 1
-            laps_dict[lap_count] = list()
+            if packet_type == 'lap_data':
+                buffer = list()
+                buffer.append(packet_data[0])
 
-        if packet_type == 'lap_data':
-            buffer = list()
-            buffer.append(packet_data[0])
+            if packet_type == 'telemetry':
+                buffer.extend(packet_data)
+                self.laps_dict[self.lap_count].append(tuple(buffer))
 
-        if packet_type == 'telemetry':
-            buffer.extend(packet_data)
-            laps_dict[lap_count].append(tuple(buffer))
+    def save_before_exit(self):
+        file_path = '../sessions/session_{}_data.txt'.format(self.now)
+        if len(self.laps_dict.keys()) > 1:
+            with open(file_path, 'w') as f:
+                for k, v in self.laps_dict.items():
+                    f.write("Lap {}: {}\n".format(k, get_lap_time(v)))
 
-
+            logging.info("Session data saved in {}".format(file_path))
 
