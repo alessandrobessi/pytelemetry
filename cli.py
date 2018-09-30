@@ -36,7 +36,7 @@ class CLI:
             telemetry.save_before_exit()
 
     @staticmethod
-    def inspect() -> None:
+    def view() -> None:
         parser = argparse.ArgumentParser(description='View session data')
         parser.add_argument('session', type=str, help='Session file to view')
         parser.add_argument('action', type=str, help='Possible views',
