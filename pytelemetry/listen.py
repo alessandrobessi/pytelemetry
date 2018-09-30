@@ -44,8 +44,7 @@ class Telemetry:
 
         self.now = datetime.datetime.now().strftime("%Y%m%d_%H%M")
 
-
-    def listen(self):
+    def listen(self) -> None:
         logging.info("{} is listening on port {} ... ".format(
             self.ip, self.port))
 
@@ -78,7 +77,7 @@ class Telemetry:
             elif int(header.m_packetId) == 7:
                 packet = PacketCarStatusData.from_buffer_copy(data[0:1061])
 
-    def save_data(self):
+    def save_data(self) -> None:
         file_path = '../sessions/session_{}.pickle'.format(self.now)
 
         for packet_type, packet_data in self.listen():
@@ -98,12 +97,11 @@ class Telemetry:
                 buffer.extend(packet_data)
                 self.laps_dict[self.lap_count].append(tuple(buffer))
 
-    def save_before_exit(self):
-        file_path = '../sessions/session_{}_data.txt'.format(self.now)
+    def save_before_exit(self) -> None:
+        file_path = '../sessions/session_{}_lap_times.txt'.format(self.now)
         if len(self.laps_dict.keys()) > 1:
             with open(file_path, 'w') as f:
                 for k, v in self.laps_dict.items():
                     f.write("Lap {}: {}\n".format(k, get_lap_time(v)))
 
-            logging.info("Session data saved in {}".format(file_path))
-
+            logging.info("Session lap times saved in {}".format(file_path))

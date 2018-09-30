@@ -78,5 +78,5 @@ class Inspector:
 
         plt.show()
 
-    def show_best_lap(self):
+    def show_best_lap(self) -> None:
         self.show_lap(lap=self.best_lap)
