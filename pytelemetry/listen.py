@@ -5,7 +5,7 @@ import pickle
 import datetime
 
 from pytelemetry.f1_2018_struct import *
-from pytelemetry.helpers import get_lap_time
+from pytelemetry.helpers import get_lap_time, create_sessions_dir
 
 logging.basicConfig(level=logging.INFO)
 
@@ -43,6 +43,8 @@ class Telemetry:
         self.laps_dict[self.lap_count] = list()
 
         self.now = datetime.datetime.now().strftime("%Y%m%d_%H%M")
+
+        create_sessions_dir()
 
     def listen(self) -> None:
         logging.info("{} is listening on port {} ... ".format(
