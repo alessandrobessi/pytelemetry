@@ -4,7 +4,7 @@ import argparse
 import sys
 
 from pytelemetry.listen import Telemetry
-from pytelemetry.inspect import Inspector
+from pytelemetry.viewer import Viewer
 
 
 class CLI:
@@ -15,9 +15,9 @@ class CLI:
             usage=('python3.6 cli.py <command> [<args>]\n'
                    '\n'
                    'listen      Register session data\n'
-                   'inspect     Inspect session data\n'))
+                   'view        View session data\n'))
         parser.add_argument('command', type=str, help='Sub-command to run',
-                            choices=['listen', 'inspect'])
+                            choices=['listen', 'view'])
 
         args = parser.parse_args(sys.argv[1:2])
         command = args.command.replace('-', '_')
@@ -37,21 +37,21 @@ class CLI:
 
     @staticmethod
     def inspect() -> None:
-        parser = argparse.ArgumentParser(description='Inspect session data')
-        parser.add_argument('session', type=str, help='Session file to inspect')
-        parser.add_argument('action', type=str, help='Possible inspections',
+        parser = argparse.ArgumentParser(description='View session data')
+        parser.add_argument('session', type=str, help='Session file to view')
+        parser.add_argument('action', type=str, help='Possible views',
                             choices=['bestlap', 'laptimes', 'lap'])
         parser.add_argument('--lap', type=int, help='Lap to inspect')
         parser.add_argument('--vs-best', type=bool, help='Compare to best lap')
 
         args = parser.parse_args(sys.argv[2:])
-        inspector = Inspector(args.session)
+        viewer = Viewer(args.session)
         if args.action == 'laptimes':
-            inspector.show_lap_times()
+            viewer.show_lap_times()
         if args.action == 'lap':
-            inspector.show_lap(args.lap, args.vs_best)
+            viewer.show_lap(args.lap, args.vs_best)
         if args.action == 'bestlap':
-            inspector.show_best_lap()
+            viewer.show_best_lap()
 
 
 if __name__ == '__main__':
