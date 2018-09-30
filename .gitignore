@@ -1,2 +1,4 @@
-.idea/
+session_*
+.idea
+__pycache__/
 sessions/
