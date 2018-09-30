@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from pytelemetry.helpers import get_lap_time
 
 
-class Inspector:
+class Viewer:
 
     def __init__(self, session: str):
         self.session = session
