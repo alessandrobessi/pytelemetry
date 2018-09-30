@@ -80,12 +80,12 @@ class Telemetry:
                 packet = PacketCarStatusData.from_buffer_copy(data[0:1061])
 
     def save_data(self) -> None:
-        file_path = '../sessions/session_{}.pickle'.format(self.now)
+        file_path = './sessions/session_{}.pickle'.format(self.now)
 
         for packet_type, packet_data in self.listen():
             if packet_type == 'lap_data' and packet_data[0] < 0.01:
                 if self.lap_count > 0:
-                    logging.info("Saving Lap {} data".format(self.lap_count))
+                    logging.info("Saving Lap data")
                     with open(file_path, 'wb') as f:
                         pickle.dump(self.laps_dict, f, protocol=pickle.HIGHEST_PROTOCOL)
                 self.lap_count += 1
@@ -100,7 +100,7 @@ class Telemetry:
                 self.laps_dict[self.lap_count].append(tuple(buffer))
 
     def save_before_exit(self) -> None:
-        file_path = '../sessions/session_{}_lap_times.txt'.format(self.now)
+        file_path = './sessions/session_{}_lap_times.txt'.format(self.now)
         if len(self.laps_dict.keys()) > 1:
             with open(file_path, 'w') as f:
                 for k, v in self.laps_dict.items():
