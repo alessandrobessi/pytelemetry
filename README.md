@@ -8,7 +8,7 @@ PyTelemetry is a *F1 2018* telemetry data collector and viewer.
  are effectively used
  
 ## Contributions
-I would love to receive pull request to improve this package.
+I would love to receive pull requests to improve this package.
 
 ## Usage
 
