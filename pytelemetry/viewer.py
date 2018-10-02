@@ -1,5 +1,6 @@
-import pickle
 import datetime
+import pickle
+
 import matplotlib.pyplot as plt
 
 from pytelemetry.helpers import get_lap_time
@@ -70,7 +71,7 @@ class Viewer:
         plt.plot(time, gear, color='b')
         if vs_best:
             plt.plot(b_time, b_gear, color='k')
-        plt.xlabel('time (sec)')
+        plt.xlabel('time')
         plt.ylabel('gear (1-8)')
         plt.yticks(range(1, 9), range(1, 9))
 
