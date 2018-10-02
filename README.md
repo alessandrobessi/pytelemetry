@@ -1,6 +1,8 @@
 # PyTelemetry
 
-PyTelemetry is a *F1 2018* telemetry data collector and viewer.
+PyTelemetry is a Codemaster's videogame *F1 2018* telemetry data collector and viewer.
+
+Datagrams specification can be found [here](https://forums.codemasters.com/discussion/136948/f1-2018-udp-specification)
 
 ## Current Limitations
 - works only in Time Trial mode
