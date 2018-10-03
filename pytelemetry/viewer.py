@@ -43,37 +43,41 @@ class Viewer:
 
         plt.subplot(4, 1, 1)
         if vs_best:
-            plt.title("Lap time: {} (Best lap: {})".format(lap_time, best_lap_time), fontsize=20)
+            plt.title("Lap {}: {} (Best Lap: {})".format(lap, lap_time, best_lap_time), fontsize=20)
         else:
-            plt.title("Lap time: {}".format(lap_time), fontsize=20)
+            plt.title("Lap {}: {}".format(lap, lap_time), fontsize=20)
 
-        plt.plot(time, speed, color='b')
+        plt.plot(time, speed, color='b', label='Lap {}'.format(lap))
         if vs_best:
-            plt.plot(b_time, b_speed, color='k')
+            plt.plot(b_time, b_speed, color='k', label='Best Lap')
         plt.xticks(ticks, [str(datetime.timedelta(seconds=t))[3:7] for t in ticks])
         plt.ylabel('speed (km/h)')
+        plt.legend(loc='upper left')
 
         plt.subplot(4, 1, 2)
-        plt.plot(time, throttle, color='b')
+        plt.plot(time, throttle, color='b', label='Lap {}'.format(lap))
         if vs_best:
-            plt.plot(b_time, b_throttle, color='k')
+            plt.plot(b_time, b_throttle, color='k', label='Best Lap')
         plt.xticks(ticks, [str(datetime.timedelta(seconds=t))[3:7] for t in ticks])
         plt.ylabel('throttle (0-100)')
+        plt.legend(loc='upper left')
 
         plt.subplot(4, 1, 3)
-        plt.plot(time, brake, color='b')
+        plt.plot(time, brake, color='b', label='Lap {}'.format(lap))
         if vs_best:
-            plt.plot(b_time, b_brake, color='k')
+            plt.plot(b_time, b_brake, color='k', label='Best Lap')
         plt.xticks(ticks, [str(datetime.timedelta(seconds=t))[3:7] for t in ticks])
         plt.ylabel('brake (0-100)')
+        plt.legend(loc='upper left')
 
         plt.subplot(4, 1, 4)
-        plt.plot(time, gear, color='b')
+        plt.plot(time, gear, color='b', label='Lap {}'.format(lap))
         if vs_best:
-            plt.plot(b_time, b_gear, color='k')
+            plt.plot(b_time, b_gear, color='k', label='Best Lap')
         plt.xlabel('time')
         plt.ylabel('gear (1-8)')
         plt.yticks(range(1, 9), range(1, 9))
+        plt.legend(loc='upper left')
 
         plt.xticks(ticks, [str(datetime.timedelta(seconds=t))[3:7] for t in ticks])
 
