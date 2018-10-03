@@ -1,5 +1,4 @@
 pytelemetry.egg-info/
-session_*
 .idea
 __pycache__/
 build/
