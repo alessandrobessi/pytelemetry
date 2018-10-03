@@ -2,7 +2,6 @@ pytelemetry.egg-info/
 session_*
 .idea
 __pycache__/
-sessions/
 build/
 dist/
 
